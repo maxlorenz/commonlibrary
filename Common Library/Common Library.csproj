@@ -50,6 +50,7 @@
     <Compile Include="Business\Components\WMI.cs" />
     <Compile Include="Business\Entities\DirectoryAccessRule.cs" />
     <Compile Include="Business\Entities\Software.cs" />
+    <Compile Include="Business\Facade\InstalledSoftware.cs" />
     <Compile Include="Business\Facade\ShareRights.cs" />
     <Compile Include="Data\Access\Command\Execute.cs" />
     <Compile Include="Data\Access\Filesystem\AccessControl.cs" />
@@ -63,7 +64,7 @@
     <Compile Include="Services\FileSystemService.cs" />
     <Compile Include="Services\LDAPService.cs" />
     <Compile Include="Services\MailService.cs" />
-    <Compile Include="Services\RegistryService.cs" />
+    <Compile Include="Services\InstalledSoftwareService.cs" />
     <Compile Include="Services\SharerightsService.cs" />
     <Compile Include="Services\WMIService.cs" />
   </ItemGroup>

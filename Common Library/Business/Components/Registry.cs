@@ -1,47 +1,45 @@
-﻿using Common_Library.Business.Entities;
-using Common_Library.Data.Access.Registry;
-using System.Collections.Generic;
+﻿using Common_Library.Data.Access.Registry;
+using System.Management;
 
 namespace Common_Library.Business.Components
 {
     class Registry
     {
-        static string softwareRegLoc = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\";
-        static string softwareRegLoc64 = @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+        public static uint HKEY_LOCAL_MACHINE = 0x80000002;
+        ManagementClass wmiRegistry;
 
-        WMIRegistry registry;
-
-        public Registry(string RemoteComputer, string Username, string Password)
+        public Registry(string RemoteComputer, string Username, string Password) 
         {
-            this.registry = new WMIRegistry(RemoteComputer, Username, Password);
+            var registry = new WMIRegistry(RemoteComputer, Username, Password);
+            wmiRegistry = registry.GetRegistryClass();
         }
 
-        public SortedSet<Software> GetInstalledSoftware()
+        public string[] GetSubKeys(string registryPath)
         {
-            var software = getSoftwareFromKey(softwareRegLoc);
-            var software64 = getSoftwareFromKey(softwareRegLoc64);
+            var method = wmiRegistry.GetMethodParameters("EnumKey");
 
-            software.UnionWith(software64);
+            method["hDefkey"] = HKEY_LOCAL_MACHINE;
+            method["sSubKeyName"] = registryPath;
 
-            return software;
+            var entries = wmiRegistry.InvokeMethod("EnumKey", method, null);
+
+            return entries["sNames"] as string[];
         }
 
-        private SortedSet<Software> getSoftwareFromKey(string regLoc)
+        public string GetRegValues(string name, string registryPath, string subKeyName)
         {
-            var set = new SortedSet<Software>();
+            var method = wmiRegistry.GetMethodParameters("GetStringValue");
 
-            foreach (var subKeyName in registry.GetSubKeys(regLoc))
-            {
-                Software temp = new Software();
+            method["sSubKeyName"] = registryPath + @"\" + subKeyName;
+            method["sValueName"] = name;
 
-                temp.Name = registry.GetRegValues("DisplayName", regLoc, subKeyName);
-                temp.Version = registry.GetRegValues("DisplayVersion", regLoc, subKeyName);
+            var value = wmiRegistry.InvokeMethod("GetStringValue", method, null);
+            var result = value.Properties["sValue"].Value;
 
-                if (!string.IsNullOrEmpty(temp.Name))
-                    set.Add(temp);
-            }
-
-            return set;
+            if (result != null)
+                return result.ToString();
+            else
+                return string.Empty;
         }
     }
 }
