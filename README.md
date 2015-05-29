@@ -15,9 +15,10 @@ public InstalledSoftwareService(string RemoteComputer, string Username, string P
 public SortedSet<Software> GetInstalledSoftware()
 
 public async Task<SortedSet<Software>> GetInstalledSoftwareAsync()
+```
+## LDAPService
 
-public class LDAPService
-
+```c#
 public LDAPService(string Domain)
 
 public IEnumerable<Principal> FindAllByName(string Name)
