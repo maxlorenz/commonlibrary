@@ -6,6 +6,15 @@ namespace Common_Library.Data.Access.Registry
     {
         ManagementClass registry;
 
+        public WMIRegistry(string remoteComputer)
+        {
+            var path = string.Format(@"\\{0}\root\cimv2", remoteComputer);
+            var scope = new ManagementScope(path, null);
+            var wmiClass = new ManagementPath("StdRegProv");
+
+            registry = new ManagementClass(scope, wmiClass, null);
+        }
+
         public WMIRegistry(string remoteComputer, string userName, string password)
         {
             var path = string.Format(@"\\{0}\root\cimv2", remoteComputer);

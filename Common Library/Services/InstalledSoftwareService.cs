@@ -9,6 +9,11 @@ namespace Common_Library.Services
     {
         InstalledSoftware installedSoftware;
 
+        public InstalledSoftwareService(string RemoteComputer)
+        {
+            installedSoftware = new InstalledSoftware(RemoteComputer);
+        }
+
         public InstalledSoftwareService(string RemoteComputer, string Username, string Password)
         {
             installedSoftware = new InstalledSoftware(RemoteComputer, Username, Password);

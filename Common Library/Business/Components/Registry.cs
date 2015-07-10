@@ -8,6 +8,12 @@ namespace Common_Library.Business.Components
         public static uint HKEY_LOCAL_MACHINE = 0x80000002;
         ManagementClass wmiRegistry;
 
+        public Registry(string RemoteComputer)
+        {
+            var registry = new WMIRegistry(RemoteComputer);
+            wmiRegistry = registry.GetRegistryClass();
+        }
+
         public Registry(string RemoteComputer, string Username, string Password) 
         {
             var registry = new WMIRegistry(RemoteComputer, Username, Password);

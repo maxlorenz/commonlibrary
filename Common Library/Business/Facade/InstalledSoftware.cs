@@ -12,6 +12,12 @@ namespace Common_Library.Business.Facade
         Registry registry;
         WMI wmi;
 
+        public InstalledSoftware(string RemoteComputer)
+        {
+            registry = new Registry(RemoteComputer);
+            wmi = new WMI(RemoteComputer);
+        }
+
         public InstalledSoftware(string RemoteComputer, string Username, string Password)
         {
             registry = new Registry(RemoteComputer, Username, Password);

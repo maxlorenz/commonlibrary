@@ -13,6 +13,10 @@ namespace Common_Library.Business.Components
 
         public WMI() { }
 
+        public WMI(string Computername) {
+            wql.SetRemoteComputer(Computername);
+        }
+
         public WMI(string Computername, string Username, string Password)
         {
             wql.SetRemoteComputer(Computername);
