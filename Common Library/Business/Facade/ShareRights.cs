@@ -43,9 +43,12 @@ namespace Common_Library.Business.Facade
         {
             foreach (FileSystemAccessRule rule in fileSystem.GetAccessRules(Directory))
             {
-                foreach (UserPrincipal user in GetAllUsersOfAccessRule(rule))
+                foreach (Principal principal in GetAllUsersOfAccessRule(rule))
                 {
-                    yield return GetRule(rule, user);
+                    if (principal is UserPrincipal)
+                    {
+                        yield return GetRule(rule, (UserPrincipal)principal);
+                    }
                 }
             }
         }
